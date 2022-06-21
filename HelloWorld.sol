@@ -3,7 +3,9 @@ pragma solidity >=0.7.0 <0.9.0;
 
 contract HelloWorld {
 
-    string message = "Hello world";
+    // string message = "Hello world";
+    string[] messages = ["Hello world"];
+
     event Message(string message);
 
     // function hello() public pure returns (string memory) {
@@ -17,11 +19,11 @@ contract HelloWorld {
     // }
 
     function hello() public returns (string memory) {
-        emit Message(message);
-        return message;
+        emit Message(messages[messages.length - 1]);
+        return messages[messages.length - 1];
     }
 
     function updateMessage(string memory newMessage) public {
-        message = newMessage;
+        messages.push(newMessage);
     }
 }
