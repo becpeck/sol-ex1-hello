@@ -4,7 +4,9 @@ pragma solidity >=0.7.0 <0.9.0;
 contract HelloWorld {
 
     // string message = "Hello world";
-    string[] messages = ["Hello world"];
+    // string[] messages = ["Hello world"];
+    mapping(address => string[]) messages;
+    address latestAddress;
 
     event Message(string message);
 
@@ -18,12 +20,33 @@ contract HelloWorld {
     //     return "Hello world";
     // }
 
+    // function hello() public returns (string memory) {
+    //     emit Message(messages[messages.length - 1]);
+    //     return messages[messages.length - 1];
+    // }
+    
     function hello() public returns (string memory) {
-        emit Message(messages[messages.length - 1]);
-        return messages[messages.length - 1];
+        if (messages[msg.sender].length == 0) {
+            messages[msg.sender].push("Hello world");
+        }
+        emit Message(messages[msg.sender][messages[msg.sender].length - 1]);
+        return messages[msg.sender][messages[msg.sender].length - 1];
     }
 
+    // function updateMessage(string memory newMessage) public {
+    //     messages.push(newMessage);
+    // }
+
     function updateMessage(string memory newMessage) public {
-        messages.push(newMessage);
+        messages[msg.sender].push(newMessage);
+        latestAddress = msg.sender;
+    }
+
+    function getMessage(address user, uint i) view public returns (string memory) {
+        return messages[user][i];
+    }
+
+    function latestMessage() view public returns (string memory, address) {
+        return (messages[latestAddress][messages[latestAddress].length - 1], latestAddress);
     }
 }
